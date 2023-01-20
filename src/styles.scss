@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap");
+$primary-color: hsl(228, 33%, 97%);
+$color-danger: hsl(358, 79%, 66%);
+$color-blue: hsl(238, 40%, 52%);
+@mixin controlBtns($color) {
+  border: none;
+  background-color: transparent;
+  font-family: "Rubik";
+  margin-right: 0.4rem;
+  color: $color;
+  font-weight: bold;
+  cursor: pointer;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html {
+  min-height: 100%;
+}
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+body {
+  min-height: 100vh;
+  width: 100%;
+  background-color: $primary-color;
+}
+main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.delete {
+  @include controlBtns($color-danger);
+}
+.edit {
+  @include controlBtns($color-blue);
+}
+.reply {
+  @include controlBtns($color-blue);
+}
+.button-primary {
+  color: $primary-color;
+  background-color: $color-blue;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}

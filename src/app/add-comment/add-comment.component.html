@@ -1,0 +1,19 @@
+<div class="reply-container">
+  <img
+    src="../../assets/images/avatars/image-juliusomo.webp"
+    alt="currentUser"
+    class="user-img"
+  />
+  <textarea
+    name=""
+    id=""
+    cols="30"
+    rows="10"
+    class="add-comment"
+    placeholder="Add a comment..."
+    [(ngModel)]="addedCommentText"
+  ></textarea>
+  <button class="button-primary" (click)="addReply()" (click)="addComment()">
+    SEND
+  </button>
+</div>

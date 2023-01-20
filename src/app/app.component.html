@@ -1,0 +1,8 @@
+<div class="content-container">
+  <app-comments [comments]="comments"></app-comments>
+  <app-add-comment
+    (commentCreated)="onCommentCreated($event)"
+    (addReply)="onAddingReplies($event)"
+  ></app-add-comment>
+  <app-delete-comment *ngIf="false" [comments]="comments"></app-delete-comment>
+</div>

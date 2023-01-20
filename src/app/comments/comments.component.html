@@ -1,0 +1,114 @@
+<div class="comments-container">
+  <div class="box" *ngFor="let comment of comments; let i = index" #box>
+    <div class="wrapper">
+      <div class="score">
+        <img
+          src="../../assets/images/icon-plus.svg"
+          alt="plus"
+          class="score__plus"
+          (click)="icreaseCommentScore(i)"
+        />
+        <div class="score__number">{{ comment.score }}</div>
+        <img
+          src="../../assets/images/icon-minus.svg"
+          alt="minus"
+          class="score__minus"
+          (click)="decreaseCommentScore(i)"
+        />
+      </div>
+      <div class="user">
+        <img src="{{ comment.user.image.img }}" alt="user" class="user__img" />
+        <p class="user__name">{{ comment.user.username }}</p>
+        <p>{{ comment.createdAt }}</p>
+      </div>
+      <div class="control">
+        <button class="reply" (click)="openReplyBox(i)">
+          <i class="fa-solid fa-reply"></i>
+          <span>Reply</span>
+        </button>
+        <button
+          class="delete"
+          *ngIf="comment.user.username == mainUser"
+          (click)="deleteComment(i)"
+        >
+          <i class="fa-solid fa-trash"></i>
+          <span>Delete</span>
+        </button>
+        <button
+          class="edit"
+          *ngIf="comment.user.username == mainUser"
+          (click)="toggleEditable(i)"
+        >
+          <i class="fa-solid fa-pen"></i>
+          <span>Edit</span>
+        </button>
+      </div>
+      <div class="text" #text [contentEditable]="false">
+        {{ comment.content }}
+      </div>
+      <button type="button" class="update" #updateButton *ngIf="visible">
+        Update
+      </button>
+    </div>
+    <div *ngIf="showReplyBox[i]">
+      <app-add-comment></app-add-comment>
+    </div>
+    <div class="reply-wrapper" *ngIf="comment.replies.length">
+      <div
+        class="comment-replies"
+        *ngFor="let reply of comment.replies; let j = index"
+      >
+        <div class="score">
+          <img
+            src="../../assets/images/icon-plus.svg"
+            alt="plus"
+            class="score score__plus"
+            (click)="icreaseReplyScore(i, j)"
+          />
+          <div class="score__number">{{ reply.score }}</div>
+          <img
+            src="../../assets/images/icon-minus.svg"
+            alt="minus"
+            class="score score__minus"
+            (click)="decreaseReplyScore(i, j)"
+          />
+        </div>
+        <div class="control">
+          <button class="reply" (click)="openReplyBox(i)">
+            <i class="fa-solid fa-reply"></i>
+            <span>Reply</span>
+          </button>
+          <button
+            class="delete"
+            *ngIf="reply.user.username == mainUser"
+            (click)="deleteReply(i, j)"
+          >
+            <i class="fa-solid fa-trash"></i>
+            <span>Delete</span>
+          </button>
+          <button
+            class="edit"
+            *ngIf="reply.user.username == mainUser"
+            (click)="toggleReplyEditable(j, i)"
+          >
+            <i class="fa-solid fa-pen"></i>
+            <span>Edit</span>
+          </button>
+        </div>
+        <div class="user">
+          <img src="{{ reply.user.image.img }}" alt="user" class="user__img" />
+          <p class="user__name">{{ reply.user.username }}</p>
+          <div class="user__you" *ngIf="reply.user.username == mainUser">
+            You
+          </div>
+          <p>{{ reply.createdAt }}</p>
+        </div>
+        <p class="text" #replyText [contentEditable]="false">
+          <span class="replyTo">@{{ reply.replyingTo }}</span>
+          {{ reply.content }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<app-delete-comment *ngIf="popupActive"></app-delete-comment>
