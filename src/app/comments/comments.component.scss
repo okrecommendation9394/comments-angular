@@ -5,11 +5,17 @@
   align-items: flex-end;
   width: 50%;
   margin: auto;
+  margin-bottom: 1rem;
 }
 
+.box {
+  width: 100%;
+}
 .wrapper {
   display: grid;
-  grid-template-areas: "score user control" "score comment comment" "score comment comment";
+  grid-template-columns: min-content 1fr min-content;
+  grid-template-rows: repeat(3, min-content);
+  //grid-template-areas: "score user control" "score comment comment" "score comment comment";
   gap: 1rem;
   color: hsl(211, 10%, 45%);
   background-color: hsl(0, 0%, 100%);
@@ -29,7 +35,9 @@
   margin-left: auto;
 }
 .control {
-  grid-area: control;
+  // grid-area: control;
+  grid-row: 1;
+  grid-column: 3;
   display: flex;
   align-self: center;
   justify-self: flex-start;
@@ -40,7 +48,9 @@
   color: hsl(238, 40%, 52%);
   background-color: hsl(228, 33%, 97%);
   border-radius: 5px;
-  grid-area: score;
+  //  grid-area: score;
+  grid-row: 1 / span 2;
+  grid-column: 1;
   font-weight: 600;
   display: flex;
   flex-direction: column;
@@ -57,7 +67,9 @@
 }
 .user {
   width: 100%;
-  grid-area: user;
+  // grid-area: user;
+  grid-column: 2;
+  grid-row: 1;
   display: flex;
   gap: 1rem;
   align-items: center;
@@ -65,15 +77,15 @@
   &__name {
     font-weight: bold;
   }
-  &__text {
-    grid-area: comment;
-    width: 100%;
-    padding: 0.3rem;
-  }
   &__img {
     height: 2rem;
     width: 2rem;
   }
+}
+.text {
+  grid-column: 2 / span 2;
+  grid-row: 2;
+  padding: 0.3rem;
 }
 .replyTo {
   font-weight: bold;
@@ -89,9 +101,64 @@
   top: 0px;
   left: 0px;
 }
-
+.popup {
+  z-index: 2;
+  position: fixed;
+  display: grid;
+  gap: 1rem;
+  grid-template-areas:
+    "heading heading"
+    "question question"
+    "no yes";
+  top: 50%;
+  left: 50%;
+  font-family: "Rubik";
+  max-width: 25%;
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 8px;
+  padding: 1rem;
+  transform: translate(-50%, -50%);
+}
+.popup h3 {
+  grid-area: heading;
+  color: hsl(212, 24%, 26%);
+  font-weight: bold;
+}
+.popup button {
+  color: hsl(0, 0%, 100%);
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: none;
+  font-weight: 500;
+}
+.popup p {
+  grid-area: question;
+  color: hsl(211, 10%, 45%);
+}
+.yes {
+  grid-area: yes;
+  background-color: hsl(358, 79%, 66%);
+  cursor: pointer;
+}
+.no {
+  grid-area: no;
+  background-color: hsl(211, 10%, 45%);
+  cursor: pointer;
+}
+.overlay {
+  width: 100%;
+  min-height: 100%;
+  z-index: 0;
+  background-color: hsl(211, 10%, 45%);
+  opacity: 0.2;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+}
 .update {
-  grid-area: update;
+  grid-column: 3;
+  grid-row: 3;
+  justify-self: end;
   background-color: hsl(238, 40%, 52%);
   border: none;
   color: hsl(0, 0%, 100%);

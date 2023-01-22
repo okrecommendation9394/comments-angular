@@ -3,14 +3,14 @@
     <div class="wrapper">
       <div class="score">
         <img
-          src="../../assets/images/icon-plus.svg"
+          src="./assets/images/icon-plus.svg"
           alt="plus"
           class="score__plus"
           (click)="icreaseCommentScore(i)"
         />
         <div class="score__number">{{ comment.score }}</div>
         <img
-          src="../../assets/images/icon-minus.svg"
+          src="./assets/images/icon-minus.svg"
           alt="minus"
           class="score__minus"
           (click)="decreaseCommentScore(i)"
@@ -29,7 +29,7 @@
         <button
           class="delete"
           *ngIf="comment.user.username == mainUser"
-          (click)="deleteComment(i)"
+          (click)="appendPopup()"
         >
           <i class="fa-solid fa-trash"></i>
           <span>Delete</span>
@@ -37,21 +37,34 @@
         <button
           class="edit"
           *ngIf="comment.user.username == mainUser"
-          (click)="toggleEditable(i)"
+          (click)="makeCommentEditable(i)"
         >
           <i class="fa-solid fa-pen"></i>
           <span>Edit</span>
         </button>
       </div>
-      <div class="text" #text [contentEditable]="false">
+      <div class="text" #commentText [contentEditable]="false">
         {{ comment.content }}
       </div>
-      <button type="button" class="update" #updateButton *ngIf="visible">
+      <button
+        type="button"
+        class="update"
+        (click)="updateCommentContent(i)"
+        *ngIf="comment.user.username === mainUser && activateUpdateButton[i]"
+      >
         Update
       </button>
-    </div>
-    <div *ngIf="showReplyBox[i]">
-      <app-add-comment></app-add-comment>
+      <div class="popup" *ngIf="popupActive">
+        <h3>Delete comment</h3>
+        <p>
+          Are you sure you want to delete this comment? This will remove the
+          comment and can't be undone
+        </p>
+        <button class="yes" id="yes" (click)="deleteComment(i)">
+          YES,DELETE
+        </button>
+        <button class="no" id="no" (click)="appendPopup()">NO,CANCEL</button>
+      </div>
     </div>
     <div class="reply-wrapper" *ngIf="comment.replies.length">
       <div
@@ -60,14 +73,14 @@
       >
         <div class="score">
           <img
-            src="../../assets/images/icon-plus.svg"
+            src="./assets/images/icon-plus.svg"
             alt="plus"
             class="score score__plus"
             (click)="icreaseReplyScore(i, j)"
           />
           <div class="score__number">{{ reply.score }}</div>
           <img
-            src="../../assets/images/icon-minus.svg"
+            src="./assets/images/icon-minus.svg"
             alt="minus"
             class="score score__minus"
             (click)="decreaseReplyScore(i, j)"
@@ -81,7 +94,7 @@
           <button
             class="delete"
             *ngIf="reply.user.username == mainUser"
-            (click)="deleteReply(i, j)"
+            (click)="appendPopup()"
           >
             <i class="fa-solid fa-trash"></i>
             <span>Delete</span>
@@ -89,7 +102,7 @@
           <button
             class="edit"
             *ngIf="reply.user.username == mainUser"
-            (click)="toggleReplyEditable(j, i)"
+            (click)="makeReplyEditable(i, j)"
           >
             <i class="fa-solid fa-pen"></i>
             <span>Edit</span>
@@ -104,11 +117,39 @@
           <p>{{ reply.createdAt }}</p>
         </div>
         <p class="text" #replyText [contentEditable]="false">
-          <span class="replyTo">@{{ reply.replyingTo }}</span>
+          <span class="replyTo"
+            >@{{ comments[reply.replyingTo].user.username }}</span
+          >
           {{ reply.content }}
         </p>
+        <button
+          type="button"
+          class="update"
+          (click)="updateReplyContent(i, j)"
+          *ngIf="false"
+        >
+          Update
+        </button>
+        <div class="popup" *ngIf="popupActive">
+          <h3>Delete comment</h3>
+          <p>
+            Are you sure you want to delete this comment? This will remove the
+            comment and can't be undone
+          </p>
+          <button class="yes" id="yes" (click)="deleteReply(i, j)">
+            YES,DELETE
+          </button>
+          <button class="no" id="no" (click)="appendPopup()">NO,CANCEL</button>
+        </div>
       </div>
+    </div>
+    <div *ngIf="showReplyBox[i]">
+      <app-add-reply
+        [comments]="comments"
+        [selectedComment]="selectedComment"
+        (replyCreated)="onReplyCreated($event)"
+      ></app-add-reply>
     </div>
   </div>
 </div>
-<app-delete-comment *ngIf="popupActive"></app-delete-comment>
+<div class="overlay" *ngIf="overlayActive"></div>

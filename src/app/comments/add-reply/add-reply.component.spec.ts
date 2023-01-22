@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteCommentComponent } from './delete-comment.component';
+import { AddReplyComponent } from './add-reply.component';
 
-describe('DeleteCommentComponent', () => {
-  let component: DeleteCommentComponent;
-  let fixture: ComponentFixture<DeleteCommentComponent>;
+describe('AddReplyComponent', () => {
+  let component: AddReplyComponent;
+  let fixture: ComponentFixture<AddReplyComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeleteCommentComponent ]
+      declarations: [ AddReplyComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DeleteCommentComponent);
+    fixture = TestBed.createComponent(AddReplyComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

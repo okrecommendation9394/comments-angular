@@ -1,42 +1,22 @@
 import { Component } from '@angular/core';
 import data from '../assets/json/data.json';
-export interface Comment {
-  id: number;
-  content: string;
-  createdAt: string;
-  user: {
-    image: { img: string };
-    username: string;
-  };
-  replies: {};
-  score: number;
-}
-export interface Reply {
-  content: string;
-  createdAt: string;
-  replyingTo: string;
-  score: number;
-  user: {
-    image: {
-      img: string;
-    };
-    username: string;
-  };
-}
+import { Comment, Reply } from './comment-types.model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  comments: Comment[] = data.comments;
+  comments: any[] = data.comments;
+  replyIndex: number = 0;
   constructor() {
     console.log(this.comments);
   }
+  // getReplyIndex(index: number) {
+  //   this.replyIndex = index;
+  //   console.log(this.replyIndex + 'fromapp');
+  // }
   onCommentCreated(comment: Comment) {
     this.comments.push(comment);
-  }
-  onAddingReplies(reply: any) {
-    console.log(reply);
   }
 }

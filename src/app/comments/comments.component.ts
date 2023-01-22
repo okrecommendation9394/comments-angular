@@ -7,7 +7,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { Comment } from '../app.component';
+import { Comment, Reply } from '../comment-types.model';
 @Component({
   selector: 'app-comments',
   templateUrl: './comments.component.html',
@@ -17,18 +17,24 @@ export class CommentsComponent {
   mainUser: string = 'juliusomo';
   @Input() comments: any[] = [];
   @Output() addingReplies = new EventEmitter<number>();
-  @ViewChildren('text') text: any;
+  @ViewChildren('commentText') commentText: any;
   @ViewChildren('replyText') replyText: any;
-  @ViewChildren('updateButton') updateButton: any;
+  commentId: number = 0;
   showReplyBox: boolean[] = [];
-  visible = false;
+  activateUpdateButton: boolean[] = [];
   popupActive = false;
-
+  overlayActive = false;
+  selectedComment: number = 0;
+  appendPopup() {
+    this.popupActive = !this.popupActive;
+    this.overlayActive = !this.overlayActive;
+  }
   deleteComment(index: number) {
     if (this.comments[index].user.username === this.mainUser) {
       this.comments.splice(index, 1);
     }
-    //this.popupActive = !this.popupActive;
+    this.popupActive = false;
+    this.overlayActive = false;
   }
   deleteReply(commentIndex: number, replyIndex: number) {
     if (
@@ -37,42 +43,51 @@ export class CommentsComponent {
     ) {
       this.comments[commentIndex].replies.splice(replyIndex, 1);
     }
+    this.popupActive = false;
+    this.overlayActive = false;
   }
-  toggleEditable(index: number) {
-    const textArr = this.text.toArray();
-    const updateBtns = this.updateButton.toArray();
-    if (textArr[index].nativeElement.contentEditable.toString() == 'false') {
-      textArr[index].nativeElement.contentEditable = true;
-    } else {
-      textArr[index].nativeElement.contentEditable = false;
-    }
+  updateCommentContent(index: number) {
+    this.activateUpdateButton[index] = false;
+    this.commentText.toArray()[index].nativeElement.contentEditable = false;
   }
-  toggleReplyEditable(replyIndex: number, commentIndex: number) {
-    const replyTextArray = this.replyText.toArray();
-    if (
-      replyTextArray[replyIndex].nativeElement.contentEditable.toString() ==
-      'false'
-    ) {
-      replyTextArray[replyIndex].nativeElement.contentEditable = true;
-    } else {
-      replyTextArray[replyIndex].nativeElement.contentEditable = false;
-    }
+  makeCommentEditable(index: number) {
+    this.activateUpdateButton[index] = true;
+    this.commentText.toArray()[index].nativeElement.contentEditable = true;
   }
+  makeReplyEditable(i: number, j: number) {
+    this.commentId++;
+    this.replyText.toArray()[this.commentId].nativeElement.contentEditable =
+      this.replyText.toArray()[this.commentId].nativeElement.contentEditable;
+    true;
+  }
+  updateReplyContent(i: number, j: number) {}
   icreaseCommentScore(index: number) {
     this.comments[index].score++;
+    this.comments.sort((a, b) => b.score - a.score);
   }
   decreaseCommentScore(index: number) {
     this.comments[index].score--;
+    this.comments.sort((a, b) => b.score - a.score);
   }
   icreaseReplyScore(commentIndex: number, replyIndex: number) {
     +this.comments[commentIndex].replies[replyIndex].score++;
+    this.comments[commentIndex].replies.sort(
+      (a: Reply, b: Reply) => b.score - a.score
+    );
   }
   decreaseReplyScore(commentIndex: number, replyIndex: number) {
     +this.comments[commentIndex].replies[replyIndex].score--;
+    this.comments[commentIndex].replies.sort(
+      (a: Reply, b: Reply) => b.score - a.score
+    );
   }
   openReplyBox(index: number) {
+    this.selectedComment = index;
     this.showReplyBox[index] = this.showReplyBox[index] ? false : true;
-    console.log(index + ' this is index');
-    this.addingReplies.emit(index);
+  }
+  onReplyCreated(reply: Reply) {
+    this.commentId = reply.id;
+    this.selectedComment = reply.replyingTo;
+    this.comments[this.selectedComment].replies.push(reply);
   }
 }
